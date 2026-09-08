@@ -1,0 +1,48 @@
+{
+  "eval_cases": [
+    {
+      "eval_case_id": "consistency_over_motivation",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Share the idea that consistency beats occasional bursts of motivation."
+          }
+        ]
+      }
+    },
+    {
+      "eval_case_id": "community_garden_volunteers",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Announce that our neighborhood garden is looking for Saturday volunteers. Keep it welcoming, but do not invent a time, address, or contact method."
+          }
+        ]
+      }
+    },
+    {
+      "eval_case_id": "remove_technical_jargon",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Explain that asynchronous distributed systems need idempotent operations so retries do not create duplicate side effects."
+          }
+        ]
+      }
+    },
+    {
+      "eval_case_id": "simplify_cloud_software_terms",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Explain that container orchestration platforms use liveness probes, autoscaling, and rolling deployments to improve service resilience."
+          }
+        ]
+      }
+    }
+  ]
+}

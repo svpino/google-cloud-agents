@@ -1,0 +1,51 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*-key.json
+*credentials*.json
+*service-account*.json
+*service_account*.json
+client_secret*.json
+application_default_credentials.json
+.secrets/
+
+# Python environments and generated files
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Test, coverage, lint, and type-check caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ty/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Agents CLI, ADK, and evaluation output
+.google-agents-cli/
+.agents-cli-scripts/
+.adk/
+.saved_chats
+.persist_vector_store
+artifacts/
+*.log
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Temporary files
+/tmp/

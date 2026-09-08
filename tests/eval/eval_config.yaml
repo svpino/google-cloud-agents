@@ -1,0 +1,9 @@
+metrics_to_run:
+  - post_constraints
+  - custom_response_quality
+
+custom_metrics:
+  - name: post_constraints
+    custom_function_file: post_constraints.py
+  - name: custom_response_quality
+    custom_function_file: response_quality.py
