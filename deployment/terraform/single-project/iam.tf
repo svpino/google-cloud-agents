@@ -55,5 +55,3 @@ resource "google_project_iam_member" "app_sa_roles" {
   member     = "serviceAccount:${google_service_account.app_sa.email}"
   depends_on = [resource.google_project_service.services]
 }
-
-
