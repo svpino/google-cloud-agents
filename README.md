@@ -111,6 +111,21 @@ agents-cli deploy --project svpino --region us-east1
 
 Built-in telemetry exports to Cloud Trace, BigQuery, and Cloud Logging.
 
+Set `LOG_AGENT_CONTENT=true` to emit two structured Cloud Logging records for
+each run: `agent_idea` and `agent_final_response`. Both records share a
+`request_id`, making each idea easy to pair with its final post. The Cloud Run
+deployment enables this setting. View the records with:
+
+```bash
+gcloud logging read \
+  'resource.type="cloud_run_revision" AND resource.labels.service_name="collaborative-post" AND (jsonPayload.event="agent_idea" OR jsonPayload.event="agent_final_response")' \
+  --project svpino \
+  --format='table(timestamp,jsonPayload.request_id,jsonPayload.event,jsonPayload.idea,jsonPayload.final_response)'
+```
+
+These records contain user-provided text. Limit access to Cloud Logging and use
+an appropriate retention period. Set `LOG_AGENT_CONTENT=false` to disable them.
+
 ## A2A Inspector
 
 This agent supports the [A2A Protocol](https://a2a-protocol.org/). Use the [A2A Inspector](https://github.com/a2aproject/a2a-inspector) to test interoperability.

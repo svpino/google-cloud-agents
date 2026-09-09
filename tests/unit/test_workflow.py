@@ -1,10 +1,18 @@
+import json
 from types import SimpleNamespace
 
 import pytest
 from google.adk.workflow import Workflow
+from google.genai import types
 from pydantic import ValidationError
 
-from app.agent import EditorialReview, review_gate, root_agent
+from app.agent import (
+    EditorialReview,
+    final_post,
+    initialize_workflow,
+    review_gate,
+    root_agent,
+)
 
 
 def test_workflow_uses_conditional_revision_routes() -> None:
@@ -37,3 +45,48 @@ def test_editorial_review_requires_a_complete_decision() -> None:
 
     with pytest.raises(ValidationError):
         EditorialReview.model_validate({"approved": True})
+
+
+def test_content_logs_pair_idea_and_final_response(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    monkeypatch.setenv("LOG_AGENT_CONTENT", "true")
+    idea = "Make time for a short walk each day."
+    post = "A short daily walk can make room to breathe and reset."
+
+    start_event = initialize_workflow(
+        types.Content(role="user", parts=[types.Part.from_text(text=idea)])
+    )
+    request_id = start_event.actions.state_delta["request_id"]
+    final_post(SimpleNamespace(state={"request_id": request_id}), post)
+
+    logs = [json.loads(line) for line in capsys.readouterr().out.splitlines()]
+    assert logs == [
+        {
+            "severity": "INFO",
+            "message": "agent_idea",
+            "event": "agent_idea",
+            "request_id": request_id,
+            "idea": idea,
+            "character_count": len(idea),
+        },
+        {
+            "severity": "INFO",
+            "message": "agent_final_response",
+            "event": "agent_final_response",
+            "request_id": request_id,
+            "final_response": post,
+            "character_count": len(post),
+        },
+    ]
+
+
+def test_content_logging_is_disabled_by_default(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    monkeypatch.delenv("LOG_AGENT_CONTENT", raising=False)
+    initialize_workflow(
+        types.Content(role="user", parts=[types.Part.from_text(text="An idea")])
+    )
+
+    assert capsys.readouterr().out == ""

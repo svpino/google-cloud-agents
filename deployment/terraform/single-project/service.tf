@@ -75,6 +75,11 @@ resource "google_cloud_run_v2_service" "app" {
       }
 
       env {
+        name  = "LOG_AGENT_CONTENT"
+        value = "true"
+      }
+
+      env {
         name  = "OTEL_SEMCONV_STABILITY_OPT_IN"
         value = "gen_ai_latest_experimental"
       }
