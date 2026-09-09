@@ -37,7 +37,19 @@ htmlcov/
 .saved_chats
 .persist_vector_store
 artifacts/
+deployment_metadata.json
 *.log
+
+# Terraform local state and overrides
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.auto.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
 
 # Editors and operating systems
 .idea/

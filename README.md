@@ -1,6 +1,6 @@
 # Collaborative Post
 
-A local ADK Workflow API prototype in which a Writer and Editor collaborate on
+A deployable ADK Workflow API agent in which a Writer and Editor collaborate on
 a polished post of approximately 300 characters. The Editor can approve a
 draft or return actionable feedback; the Writer then revises it. Conditional
 graph routes stop on approval or after three review rounds.
@@ -15,6 +15,7 @@ google-cloud-agents/
 │   ├── agent.py               # Writer/Editor workflow graph
 │   ├── fast_api_app.py        # FastAPI Backend server
 │   └── app_utils/             # App utilities and helpers
+├── deployment/                # Cloud Run Terraform configuration
 ├── tests/                     # Unit, integration, and evaluation tests
 ├── AGENTS.md                  # AI-assisted development guide
 └── pyproject.toml             # Project dependencies
@@ -85,8 +86,26 @@ Edit your agent logic in `app/agent.py` and test with `agents-cli playground` - 
 
 ## Deployment
 
-This project is intentionally a local prototype. Add a deployment target with
-`agents-cli scaffold enhance` before using `agents-cli deploy`.
+The agent is deployed as an authenticated Cloud Run service in `us-east1`:
+
+```text
+https://collaborative-post-c7icovgtka-ue.a.run.app
+```
+
+Send an authenticated request through the A2A endpoint:
+
+```bash
+agents-cli run \
+  --url https://collaborative-post-c7icovgtka-ue.a.run.app \
+  --mode a2a \
+  "Share an idea about making time for a short walk each day."
+```
+
+Redeploy the current source with:
+
+```bash
+agents-cli deploy --project svpino --region us-east1
+```
 
 ## Observability
 
