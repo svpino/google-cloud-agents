@@ -48,9 +48,8 @@ def test_editorial_review_requires_a_complete_decision() -> None:
 
 
 def test_content_logs_pair_idea_and_final_response(
-    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+    capsys: pytest.CaptureFixture[str],
 ) -> None:
-    monkeypatch.setenv("LOG_AGENT_CONTENT", "true")
     idea = "Make time for a short walk each day."
     post = "A short daily walk can make room to breathe and reset."
 
@@ -81,7 +80,7 @@ def test_content_logs_pair_idea_and_final_response(
     ]
 
 
-def test_content_logging_is_disabled_by_default(
+def test_content_logging_is_enabled_without_configuration(
     monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
     monkeypatch.delenv("LOG_AGENT_CONTENT", raising=False)
@@ -89,4 +88,6 @@ def test_content_logging_is_disabled_by_default(
         types.Content(role="user", parts=[types.Part.from_text(text="An idea")])
     )
 
-    assert capsys.readouterr().out == ""
+    log = json.loads(capsys.readouterr().out)
+    assert log["event"] == "agent_idea"
+    assert log["idea"] == "An idea"

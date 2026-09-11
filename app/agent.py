@@ -14,7 +14,6 @@
 # limitations under the License.
 
 import json
-import os
 from uuid import uuid4
 
 from google.adk.agents import LlmAgent
@@ -30,19 +29,12 @@ from pydantic import BaseModel, Field
 MODEL = "gemini-3.7-flash"
 MIN_POST_LENGTH = 280
 MAX_POST_LENGTH = 320
-CONTENT_LOGGING_TRUE_VALUES = {"1", "true", "yes", "on"}
 
 
 def _log_agent_content(
     *, event: str, request_id: str, field_name: str, value: str
 ) -> None:
-    """Write one filterable JSON record when content logging is enabled."""
-    if (
-        os.getenv("LOG_AGENT_CONTENT", "").strip().lower()
-        not in CONTENT_LOGGING_TRUE_VALUES
-    ):
-        return
-
+    """Write one filterable JSON record for the idea or final response."""
     print(
         json.dumps(
             {
